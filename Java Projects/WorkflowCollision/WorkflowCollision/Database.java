@@ -1,6 +1,12 @@
 package WorkflowCollision;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.net.InetAddress;
+import java.util.Iterator;
+import java.util.Map;
+import WorkflowCollision.Object.Application;
 
 public class Database {
     String hostName = "laptop-dkpa9ai8";
@@ -28,6 +34,44 @@ public class Database {
         }
         catch(Exception e){
             return "Unknown error checking connection";
+        }
+    }
+
+    public void saveObject(Object object){
+        String endOfLine = System.getProperty("line.separator");
+        String csv = "c:\\users\\Colton\\downloads\\tempDatabase.csv";
+        Map.Entry<String,String> attribute;
+        try (Writer writer = new FileWriter(csv)) {
+            Iterator iterator = object.attributes.entrySet().iterator();
+            while(iterator.hasNext()){
+                attribute = (Map.Entry)iterator.next();
+                writer.append(attribute.getValue());
+                if(iterator.hasNext()) {
+                    writer.append(',');
+                }
+            }
+            writer.append(endOfLine);
+        } catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+    }
+
+    public void saveObject(Application object){
+        String endOfLine = System.getProperty("line.separator");
+        String csv = "c:\\users\\Colton\\downloads\\tempDatabase.csv";
+        Map.Entry<String,String> attribute;
+        try (Writer writer = new FileWriter(csv)) {
+            Iterator iterator = object.attributes.entrySet().iterator();
+            while(iterator.hasNext()){
+                attribute = (Map.Entry)iterator.next();
+                writer.append(attribute.getValue());
+                if(iterator.hasNext()) {
+                    writer.append(',');
+                }
+            }
+            writer.append(endOfLine);
+        } catch (IOException ex) {
+            ex.printStackTrace(System.err);
         }
     }
 }

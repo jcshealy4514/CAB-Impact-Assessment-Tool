@@ -2,6 +2,7 @@ package WorkflowCollision;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import WorkflowCollision.Database;
 
 public class Object {
 
@@ -20,12 +21,14 @@ public class Object {
         public Application(String objectName,String description) {
             super(objectName);
             this.attributes.put("description",description);
+            this.attributes.put("objectType","Application");
         }
     }
 
     public static void main(String[] args) {
         Object object = new Application("Test Application","This is a test application used for testing");
-        System.out.println(object.getAttributes());
+        Database con = new Database();
+        con.saveObject(object);
     }
 
     public String getName() {
