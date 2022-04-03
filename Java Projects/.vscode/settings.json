@@ -1,0 +1,9 @@
+{
+    "java.project.sourcePaths": [
+        "helloWorld",
+        "PongGame",
+        "AdventCode",
+        "Main",
+        "WorkflowCollision"
+    ]
+}
