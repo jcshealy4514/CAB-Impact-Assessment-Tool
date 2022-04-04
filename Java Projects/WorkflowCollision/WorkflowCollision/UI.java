@@ -2,7 +2,8 @@ package WorkflowCollision;
 import javax.swing.*;
 
 public class UI {
-
+//NOTE- THIS REPRESENTS THE FRONT END THAT USERS WILL WORK WITH, I CREATED SOME BASIC CLASSES I EXPECT TO USE LATER
+//I KNOW VERY LITTLE ABOUT SWING SO A LOT OF WHAT YOU SEE IS VERY UNPOLISHED AND IS HONESTLY GARBLED QUASI HUMAN LOGIC(no way!)
     JFrame frame = new JFrame();
     JPanel panel = new JPanel();
 

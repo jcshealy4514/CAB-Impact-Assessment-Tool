@@ -9,6 +9,8 @@ import java.util.Map;
 import WorkflowCollision.Object.Application;
 
 public class Database {
+//NOTE- THIS REPRESENTS THE CONNECTION TO THE DATABASE/SQL SERVER I WILL USE TO STORE DATA
+//I DONT HAVE A SQL SERVER THOUGH SO FOR THE TIME BEING I USED A CSV FILE(no way!)
     String hostName = "laptop-dkpa9ai8";
     String ipAddress = "192.168.1.173";
     int timeOut = 3000; //3 seconds

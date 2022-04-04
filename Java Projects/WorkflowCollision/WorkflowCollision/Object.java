@@ -5,7 +5,8 @@ import java.util.HashMap;
 import WorkflowCollision.Database;
 
 public class Object {
-
+//NOTE - OBJECT CLASS DEFINES THE BASIC SET OF DATA ALL TYPES OF OBJECTS SHOULD HAVE IN THE DB
+//THERE IS A NESTED CLASS CALLED APPLICATION WITHIN THIS FILE THAT REPRESENTS A APPLICATION OBJECT(no way!)
     HashMap<String, String> attributes = new HashMap<>();
     final LocalDate dateCreated = LocalDate.now();
 
