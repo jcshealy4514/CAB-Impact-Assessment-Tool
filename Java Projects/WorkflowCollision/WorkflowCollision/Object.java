@@ -2,7 +2,6 @@ package WorkflowCollision;
 
 import java.time.LocalDate;
 import java.util.HashMap;
-import WorkflowCollision.Database;
 
 public class Object {
 //NOTE - OBJECT CLASS DEFINES THE BASIC SET OF DATA ALL TYPES OF OBJECTS SHOULD HAVE IN THE DB
@@ -27,7 +26,7 @@ public class Object {
     }
 
     public static void main(String[] args) {
-        Object object = new Application("Test Application","This is a test application used for testing");
+        Object object = new Application("OnBase","EMR Solution used for storing documentation.");
         Database con = new Database();
         con.saveObject(object);
     }

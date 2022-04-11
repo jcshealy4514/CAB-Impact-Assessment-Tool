@@ -1,12 +1,11 @@
 package WorkflowCollision;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import WorkflowCollision.Object.Application;
+
+import java.io.*;
 import java.net.InetAddress;
 import java.util.Iterator;
 import java.util.Map;
-import WorkflowCollision.Object.Application;
 
 public class Database {
 //NOTE- THIS REPRESENTS THE CONNECTION TO THE DATABASE/SQL SERVER I WILL USE TO STORE DATA
@@ -40,40 +39,46 @@ public class Database {
     }
 
     public void saveObject(Object object){
+        System.out.println("started saveObject method");
         String endOfLine = System.getProperty("line.separator");
-        String csv = "c:\\users\\Colton\\downloads\\tempDatabase.csv";
+        String csv = "C:/Users/Colton/Downloads/tempDatabase.csv";
         Map.Entry<String,String> attribute;
-        try (Writer writer = new FileWriter(csv)) {
+        FileWriter writer = null;
+        BufferedWriter buffWriter = null;
+        PrintWriter printWriter = null;
+        try {
+            //I know there is a simpler solution but this works and I intend to use an actual DB later!
+            writer = new FileWriter(csv,true);
+            buffWriter = new BufferedWriter(writer);
+            printWriter = new PrintWriter(buffWriter);
             Iterator iterator = object.attributes.entrySet().iterator();
             while(iterator.hasNext()){
                 attribute = (Map.Entry)iterator.next();
-                writer.append(attribute.getValue());
+                printWriter.print(attribute.getValue());
                 if(iterator.hasNext()) {
-                    writer.append(',');
+                    printWriter.print(',');
                 }
             }
-            writer.append(endOfLine);
-        } catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            printWriter.print(endOfLine);
+            printWriter.close();
         }
-    }
+        catch(Exception e){
 
-    public void saveObject(Application object){
-        String endOfLine = System.getProperty("line.separator");
-        String csv = "c:\\users\\Colton\\downloads\\tempDatabase.csv";
-        Map.Entry<String,String> attribute;
-        try (Writer writer = new FileWriter(csv)) {
-            Iterator iterator = object.attributes.entrySet().iterator();
-            while(iterator.hasNext()){
-                attribute = (Map.Entry)iterator.next();
-                writer.append(attribute.getValue());
-                if(iterator.hasNext()) {
-                    writer.append(',');
-                }
+        }
+        finally{
+            try {
+                writer.close();
             }
-            writer.append(endOfLine);
-        } catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            catch(IOException e){
+
+            }
+            try {
+                buffWriter.close();
+            }
+            catch(IOException e){
+
+            }
+            printWriter.close();
         }
     }
 }
