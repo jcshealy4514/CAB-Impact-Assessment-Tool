@@ -4,6 +4,7 @@ import WorkflowCollision.Object.Application;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class UI implements ActionListener {
 //NOTE- THIS REPRESENTS THE FRONT END THAT USERS WILL WORK WITH, I CREATED SOME BASIC CLASSES I EXPECT TO USE LATER
@@ -35,7 +36,7 @@ public class UI implements ActionListener {
         //JMenu
         static JMenu fileMenu, fileSubMenu;
         //Menu items
-        static JMenuItem saveOp, exportOp, settingOp, app1, app2;
+        static JMenuItem saveOp, exportOp, settingOp, app;
         //Create a label
         static JLabel menuFrameLabel;
 
@@ -44,6 +45,8 @@ public class UI implements ActionListener {
         }
 
         public static void buildMenuBar(UI ui){
+            Database con = new Database();
+            List<Application> appList = con.getObjects();
 
             menuBar = new JMenuBar();
             fileMenu = new JMenu("File");
@@ -51,23 +54,28 @@ public class UI implements ActionListener {
             saveOp = new JMenuItem("Save");
             exportOp = new JMenuItem("Export");
             settingOp = new JMenuItem("Settings");
-            app1 = new JMenuItem("WorkDay");
-            app2 = new JMenuItem("EADB");
+            //app1 = new JMenuItem("WorkDay");
+            //app2 = new JMenuItem("EADB");
             menuFrameLabel = new JLabel("no task ");
 
             saveOp.addActionListener(ui);
             exportOp.addActionListener(ui);
             settingOp.addActionListener(ui);
-            app1.addActionListener(ui);
-            app2.addActionListener(ui);
+            //app1.addActionListener(ui);
+            //app2.addActionListener(ui);
 
             fileMenu.add(saveOp);
             fileMenu.add(exportOp);
             fileMenu.add(settingOp);
-            fileSubMenu.add(app1);
-            fileSubMenu.add(app2);
+            //fileSubMenu.add(app1);
+            //fileSubMenu.add(app2);
             fileMenu.add(fileSubMenu);
             menuBar.add(fileMenu);
+            for(Application appName : appList){
+                app = new JMenuItem(appName.getName());
+                app.addActionListener(ui);
+                fileSubMenu.add(app);
+            }
 
             ui.frame.setJMenuBar(menuBar);
             ui.frame.add(menuFrameLabel);

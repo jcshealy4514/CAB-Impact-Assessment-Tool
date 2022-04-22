@@ -4,8 +4,9 @@ import WorkflowCollision.Object.Application;
 
 import java.io.*;
 import java.net.InetAddress;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class Database {
@@ -42,8 +43,68 @@ public class Database {
         }
     }
 
+    public void saveObject(Object object, Boolean force){
+        //Check for duplicate before anything else
+        String appName = object.getName();
+        Boolean isDuplicate = isDuplicate(appName);
+        if(isDuplicate && force){
+            removeObject(appName);
+        }
+        else if(isDuplicate){
+            return;
+        }
+
+        //Continue to save object
+        String endOfLine = System.getProperty("line.separator");
+        Map.Entry<String,String> attribute;
+        FileWriter writer = null;
+        BufferedWriter buffWriter = null;
+        PrintWriter printWriter = null;
+        try {
+            //I know there is a simpler solution but this works and I intend to use an actual DB later! NEED TO ADD DUPE CHECKING
+            writer = new FileWriter(csv,true);
+            buffWriter = new BufferedWriter(writer);
+            printWriter = new PrintWriter(buffWriter);
+            Iterator iterator = object.attributes.entrySet().iterator();
+            while(iterator.hasNext()){
+                attribute = (Map.Entry)iterator.next();
+                printWriter.print(attribute.getValue());
+                if(iterator.hasNext()) {
+                    printWriter.print(',');
+                }
+            }
+            printWriter.print(endOfLine);
+            printWriter.close();
+        }
+        catch(Exception e){
+
+        }
+        finally{
+            try {
+                writer.close();
+            }
+            catch(IOException e){
+
+            }
+            try {
+                buffWriter.close();
+            }
+            catch(IOException e){
+
+            }
+            printWriter.close();
+        }
+    }
+
     public void saveObject(Object object){
-        System.out.println("started saveObject method");
+        //Check for duplicate before anything else
+        Boolean force = false;
+        String appName = object.getName();
+        if(isDuplicate(appName)){
+            return;
+        }
+
+        //Continue to save object
         String endOfLine = System.getProperty("line.separator");
         Map.Entry<String,String> attribute;
         FileWriter writer = null;
@@ -86,8 +147,6 @@ public class Database {
     }
 
     public Application getObject(String appName){
-        //For this to work, I probably want to make a new Application Constructor that is private and takes String[] as the argument. Then make a method to make all
-        //args in the array as their respective props
         String line = null;
         String[] lineData;
         String[] data = new String[0];
@@ -114,5 +173,80 @@ public class Database {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List getObjects(){
+        //Consider adding a filter in the future - for optional parameters we will want to overload it with a method with zero args
+        String line = null;
+        String[] lineData;
+        Application application;
+        List applications = new ArrayList<>();
+        try {
+            FileReader file = new FileReader(csv);
+            BufferedReader reader = new BufferedReader(file);
+            reader.readLine();
+            while ((line = reader.readLine()) != null) {
+                application = new Application(line.split(","));
+                applications.add(application);
+            }
+            reader.close();
+            file.close();
+            return applications;
+        }
+        catch(FileNotFoundException e){
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void removeObject(String appName){
+        //This feels super inefficient- Java why do you challenge me so
+        //Also instead of calling the exact index of a column, I probably want to check column names dynamically so people can add fields on this(like future me!)
+        String endOfLine = System.getProperty("line.separator");
+        String line = null;
+        String[] lineData;
+        String[] writeData;
+        //List<Object> appList = new ArrayList<>();
+        List<String> appList = new ArrayList<>();
+        Object object;
+
+        try {
+            FileReader file = new FileReader(csv);
+            BufferedReader reader = new BufferedReader(file);
+            while ((line = reader.readLine()) != null) {
+                lineData = line.split(",");
+                if(!lineData[2].equals(appName)){
+                    line = line + endOfLine;
+                    appList.add(line);
+                    //object = new Application(lineData[2],lineData[3]);
+                    //appList.add(object);
+                }
+            }
+            file.close();
+            reader.close();
+
+            FileWriter fileWriter = new FileWriter(csv);
+            for(String writeLine : appList){
+                fileWriter.append(writeLine);
+            }
+            fileWriter.close();
+        }
+        catch(FileNotFoundException e){
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public Boolean isDuplicate(String appName){
+        if(this.getObject(appName) != null){
+            return Boolean.TRUE;
+        }
+        else{
+            return Boolean.FALSE;
+        }
     }
 }
