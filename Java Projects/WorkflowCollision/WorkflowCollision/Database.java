@@ -183,7 +183,9 @@ public class Database {
     }
 
     public String[][] getAppsAs2DArray() throws IOException {
-        String[][] array = new String[10][10];
+        int columnSize = getColumns().length;
+        int rowSize = getObjectCount() + 1; //+1 to account for headers in the table
+        String[][] array = new String[rowSize][columnSize];
         String[] rowData = new String[0];
         String line;
         int row = 0;
@@ -203,7 +205,7 @@ public class Database {
     }
 
     public int getObjectCount() throws IOException {
-        int size = 0;
+        int size = -1; //-1 to ignore column headers
         String line;
         BufferedReader reader = readData();
         while ((line = reader.readLine()) != null) {
