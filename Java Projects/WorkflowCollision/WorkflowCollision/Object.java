@@ -1,5 +1,8 @@
 package WorkflowCollision;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -43,13 +46,13 @@ public class Object {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         //Create Application Object
-        Object object = new Application("OnBase","EMR Solution used for storing documentation.");
+        Application app = new Application("CustomApp2","No description.");
 
         //Add Application Object to DB (temp CSV file)
         Database con = new Database();
-        con.saveObject(object, true);
+        //con.saveObject(app);
 
         //Get Application Objects
         //List<Application> appList = con.getObjects();
@@ -59,7 +62,9 @@ public class Object {
 
 
         //Generate UI
-        UI.main(null);
+        UI ui = UI.main(null);
+        //Display new app defined above
+        //ui.addApplication(ui,app);
     }
 
     public String getName() {
@@ -70,7 +75,7 @@ public class Object {
     public String getAttribute(String attribute) {
         try {
             //System.out.println(attribute + ": " + (this.attributes.get(attribute)));
-            return attribute + ": " + (this.attributes.get(attribute));
+            return this.attributes.get(attribute);
         } catch (Exception e) {
             return e.toString();
         }

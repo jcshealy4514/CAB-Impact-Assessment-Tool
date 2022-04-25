@@ -2,8 +2,12 @@ package WorkflowCollision;
 import WorkflowCollision.Object.Application;
 
 import javax.swing.*;
+import javax.swing.table.TableColumn;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class UI implements ActionListener {
@@ -11,6 +15,7 @@ public class UI implements ActionListener {
 //I KNOW VERY LITTLE ABOUT SWING SO A LOT OF WHAT YOU SEE IS UNPOLISHED AND IS MY HALFASSED ATTEMPT AT LEARNING IT(no way!)
 //TO CHANGE - I think the structure of this will not work, I'm planning to remove any nested classes and instead create methods for each component I want to create.
     //4-18 next step is to update the UI after adding a object + create a object through the UI
+        //4-25 added a table and cleaned up a lot of stuff, still need to be able to create objects through the UI
 
     String name;
     JFrame frame = new JFrame();
@@ -31,7 +36,6 @@ public class UI implements ActionListener {
 
     public static class MenuBar extends UI{
         //menu bar at top of UI
-        //menubar
         static JMenuBar menuBar;
         //JMenu
         static JMenu fileMenu, fileSubMenu;
@@ -44,9 +48,7 @@ public class UI implements ActionListener {
             super();
         }
 
-        public static void buildMenuBar(UI ui){
-            Database con = new Database();
-            List<Application> appList = con.getObjects();
+        public static void buildMenuBar(UI ui,List appList){
 
             menuBar = new JMenuBar();
             fileMenu = new JMenu("File");
@@ -54,24 +56,18 @@ public class UI implements ActionListener {
             saveOp = new JMenuItem("Save");
             exportOp = new JMenuItem("Export");
             settingOp = new JMenuItem("Settings");
-            //app1 = new JMenuItem("WorkDay");
-            //app2 = new JMenuItem("EADB");
             menuFrameLabel = new JLabel("no task ");
 
             saveOp.addActionListener(ui);
             exportOp.addActionListener(ui);
             settingOp.addActionListener(ui);
-            //app1.addActionListener(ui);
-            //app2.addActionListener(ui);
 
             fileMenu.add(saveOp);
             fileMenu.add(exportOp);
             fileMenu.add(settingOp);
-            //fileSubMenu.add(app1);
-            //fileSubMenu.add(app2);
             fileMenu.add(fileSubMenu);
             menuBar.add(fileMenu);
-            for(Application appName : appList){
+            for(Application appName : (List<Application>) appList){
                 app = new JMenuItem(appName.getName());
                 app.addActionListener(ui);
                 fileSubMenu.add(app);
@@ -82,24 +78,33 @@ public class UI implements ActionListener {
         }
     }
 
-    public static class Dialog extends UI{
+    public static class Table extends UI{
 
-        JOptionPane optionPane = new JOptionPane();
+        public Table(){
+            super();
+        }
 
-        public Dialog(){
-            this.optionPane.toString(); //Filler
+        public static void buildAppTable(UI ui, List appList, String[] columnNames, String[][] appData){
+            JTable appTable = new JTable(appData,columnNames);
+            JScrollPane scrollPane = new JScrollPane(appTable);
+            appTable.setFillsViewportHeight(true);
+            ui.frame.add(appTable);
         }
     }
 
-    public static void main(String[] args){
+    public static UI main(String[] args) throws IOException {
 
+        Database con = new Database();
+        List<Application> appList = con.getObjects();
+        String[] columnNames = con.getColumns();
+        String[][] appData = con.getAppsAs2DArray();
         UI ui = new UI("Main UI");
         ui.frame.setBounds(100,100,450,350);
         ui.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        UI.MenuBar.buildMenuBar(ui);
-        //I have decided that the MenuBar should not be a nested class. I should probably just create a method for each
-        //component I want to build.  //UPDATE - But this kinda works though?
+        UI.MenuBar.buildMenuBar(ui,appList);
+        UI.Table.buildAppTable(ui,appList,columnNames,appData);
         ui.frame.setVisible(true); //Last Action
+        return ui;
     }
 
     public static void addApplication(UI ui, Application application){
