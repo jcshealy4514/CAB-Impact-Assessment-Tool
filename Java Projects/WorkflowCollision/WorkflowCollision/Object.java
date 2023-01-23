@@ -9,7 +9,8 @@ import java.util.List;
 
 public class Object {
 //NOTE - OBJECT CLASS DEFINES THE BASIC SET OF DATA ALL TYPES OF OBJECTS SHOULD HAVE IN THE DB
-//THERE IS A NESTED CLASS CALLED APPLICATION WITHIN THIS FILE THAT REPRESENTS A APPLICATION OBJECT(no way!)
+//THERE IS A NESTED CLASS CALLED APPLICATION WITHIN THIS FILE THAT REPRESENTS A APPLICATION OBJECT
+//Most code in this file is used for testing as I development out functionality one by one for this app
     HashMap<String, String> attributes = new HashMap<>();
     String name;
     String createdBy;
