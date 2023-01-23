@@ -12,10 +12,9 @@ import java.util.List;
 
 public class UI implements ActionListener {
 //NOTE- THIS REPRESENTS THE FRONT END THAT USERS WILL WORK WITH, I CREATED SOME BASIC CLASSES I EXPECT TO USE LATER
-//I KNOW VERY LITTLE ABOUT SWING SO A LOT OF WHAT YOU SEE IS UNPOLISHED AND IS MY HALFASSED ATTEMPT AT LEARNING IT(no way!)
 //TO CHANGE - I think the structure of this will not work, I'm planning to remove any nested classes and instead create methods for each component I want to create.
     //4-18 next step is to update the UI after adding a object + create a object through the UI
-        //4-25 added a table and cleaned up a lot of stuff, still need to be able to create objects through the UI
+        //4-25 added a table and cleaned up a lot of stuff, still need to be able to create objects through the UI directly
 
     String name;
     JFrame frame = new JFrame();
@@ -111,6 +110,6 @@ public class UI implements ActionListener {
         String appName = application.getAttribute("name");
         JMenuItem newApp = new JMenuItem(appName);
 
-        ui.frame.getJMenuBar().getMenu(0).getItem(3).add(newApp); //Surely there is a way to make this look better?
+        ui.frame.getJMenuBar().getMenu(0).getItem(3).add(newApp); //Surely there is a way to make this look better? any suggestions?
     }
 }
